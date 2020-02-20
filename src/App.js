@@ -9,6 +9,7 @@ import Rank from './components/Rank/Rank';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import './App.css';
 
+
 const particlesOptions = {
   particles: {
     number: {
@@ -20,6 +21,7 @@ const particlesOptions = {
     }
   }
 }
+
 
 const initialState = {
   input: '',
@@ -36,11 +38,13 @@ const initialState = {
   }
 }
 
+
 class App extends Component {
   constructor() {
     super();
     this.state = initialState;
   }
+
 
   loadUser = (data) => {
     this.setState({user: {
@@ -51,6 +55,7 @@ class App extends Component {
       joined: data.joined
     }})
   }
+
 
   calculateFaceLocation = (data) => {
     const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
@@ -65,17 +70,20 @@ class App extends Component {
     }
   }
 
+
   displayFaceBox = (box) => {
     this.setState({box: box});
   }
+
 
   onInputChange = (event) => {
     this.setState({input: event.target.value});
   }
 
+
   onImageSubmit = () => {
     this.setState({imageUrl: this.state.input});
-      fetch('http://localhost:3000/imageurl', {
+      fetch('https://desolate-stream-31605.herokuapp.com/imageurl', {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -85,7 +93,7 @@ class App extends Component {
       .then(response => response.json())
       .then(response => {
         if (response) {
-          fetch('http://localhost:3000/image', {
+          fetch('https://desolate-stream-31605.herokuapp.com/image', {
             method: 'put',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -103,6 +111,7 @@ class App extends Component {
       .catch(err => console.log(err));
   }
 
+
   onRouteChange = (route) => {
     if (route === 'signout') {
       this.setState(initialState)
@@ -111,6 +120,7 @@ class App extends Component {
     }
     this.setState({route: route});
   }
+
 
   render() {
     const { isSignedIn, imageUrl, route, box } = this.state;
@@ -135,5 +145,6 @@ class App extends Component {
     );
   }
 }
+
 
 export default App;
